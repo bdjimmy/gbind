@@ -174,7 +174,6 @@ BenchmarkBind/gin-query-form-8         	  612357	      1937 ns/op	     304 B/op	
 BenchmarkBind/gbind-query-form-8       	 6981271	      171.3 ns/op	     200 B/op	       5 allocs/op
 ```
 
-	- http的query+form+cookie参数绑定，gin、gbind包对比
 	- HTTP query+form+cookie parameter binding, gin, gbind package comparison
 ```
 BenchmarkBind/gin-query-form-header-8  	  232152	      5143 ns/op	     736 B/op	      53 allocs/op
