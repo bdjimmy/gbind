@@ -21,7 +21,7 @@
 	- 根据定义的 `validate`tag进行绑定字段的数据校验，依赖github.com/go-playground/validator实现， `validate="required,lt=100"`
 	- 支持自定义校验逻辑，通过调用 `RegisterCustomValidation`函数可以自定义数据校验逻辑
 	- 支持自定义校验失败的错误提示信息
-		- 通过定义 err_msg 的tag，在参数校验失败时支持自定义错误信息，demo `gbind:"http.cookie.BDUSS" validate="required,lt=100" err_msg="请想完成登录"`
+		- 通过定义 err_msg 的tag，在参数校验失败时支持自定义错误信息，demo `gbind:"http.cookie.Token" validate="required,lt=100" err_msg="请想完成登录"`
 ## Usage example
 - 使用gbind的web API请求参数进行绑定和校验
 
@@ -71,7 +71,7 @@ func ExampleGbind() {
 		URL: u,
 	}
 	r.AddCookie(&http.Cookie{
-		Name:  "BDUSS",
+		Name:  "Token",
 		Value: "foo-bar-andsoon",
 	})
 
@@ -87,7 +87,7 @@ func ExampleGbind() {
 	//	"Appkey": "abc",
 	//	"Page": 2,
 	//	"Size": 10,
-	//	"Bduss": "foo-bar-andsoon",
+	//	"Token": "foo-bar-andsoon",
 	//	"Host": "gbind.baidu.com",
 	//	"Uids": [
 	//		1,
