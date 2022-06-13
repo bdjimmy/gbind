@@ -14,7 +14,7 @@ English | [🇨🇳中文](README_ZH.md)
 	- Built-in json binding capability, implemented with encoding/json
 		- For HTTP body in json format, follow golang json parsing format uniformly `json:"varname"`
 	- Support for setting default values of bound fields
-		- Supports setting default values of bound fields when no data is passed in `gbind:"http.query.变量名,default=123"`
+		- Supports setting default values of bound fields when no data is passed in `gbind:"http.query.varname,default=123"`
 	- Support custom binding parsing logic (not limited to HTTP requests, using gbind can do bindings similar to database tags and other scenarios)
 		- You can register custom binding logic by calling the `RegisterBindFunc` function, such as implementing a binding of the form `gbind:"simple.key"`
 
@@ -165,7 +165,7 @@ func TestRegisterCustomValidation(t *testing.T) {
 ```
 
 ## benchmark
-+ Stressed the binding capabilities of the gin framework and the gbind package. The simple binding capabilities of query+form, gbind has a performance improvement of more than 10 times, and the complex binding capabilities of query+form+header, gbind has **30 times or more** performance improvement, the specific data are as follows
++ Stressed the binding capabilities of the gin framework and the gbind package. The simple binding capabilities of query+form, gbind has a performance improvement of more than **10 times**, and the complex binding capabilities of query+form+header, gbind has **30 times or more** performance improvement, the specific data are as follows
 	- HTTP query+form parameter binding, gin, gbind package comparison
 ```	
 BenchmarkBind/gin-query-form-8         	  612357	      1937 ns/op	     304 B/op	      20 allocs/op
@@ -173,19 +173,20 @@ BenchmarkBind/gbind-query-form-8       	 6981271	      171.3 ns/op	     200 B/op
 ```
 
 	- http的query+form+cookie参数绑定，gin、gbind包对比
+	- HTTP query+form+cookie parameter binding, gin, gbind package comparison
 ```
 BenchmarkBind/gin-query-form-header-8  	  232152	      5143 ns/op	     736 B/op	      53 allocs/op
 BenchmarkBind/gbind-query-form-header-8   6673236	      180.0 ns/op	     232 B/op	       5 allocs/op	
 ```
 
 ## Binding supported underlying data types
-+ 基础数据类型
++ basic data type
 	- int、int8、int16、int32、int64
 	- uint、uint8、uint16、uint32、uint64
 	- float32、float64
 	- bool
 	- string
-+ 其他数据类型	
++ other data types	
 	- ptr
 		- *int、*uint、*float32、*string
 		- **int、**uint、**float32、**string
