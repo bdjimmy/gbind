@@ -42,7 +42,7 @@ type Params struct {
 	Appkey string `gbind:"http.query.appkey,default=appkey-default"`
 	Page   int    `gbind:"http.query.page,default=1"`
 	Size   int    `gbind:"http.query.size,default=10"`
-	Bduss  string `gbind:"http.cookie.BDUSS" validate:"required" err_msg:"please login"`
+	Token  string `gbind:"http.cookie.Token" validate:"required" err_msg:"please login"`
 	Host   string `gbind:"http.header.host,default=www.baidu.com"`
 	Uids   []int  `gbind:"http.form.uids"`
 }
