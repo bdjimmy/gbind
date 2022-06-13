@@ -24,7 +24,7 @@ English | [🇨🇳中文](README_ZH.md)
 	- Data validation of bound fields is performed according to the defined `validate`tag, which depends on github.com/go-playground/validator implementation, `validate="required,lt=100"`
 	- Support custom validation logic, you can customize the data validation logic by calling the `RegisterCustomValidation` function
 	- Support custom error message for validation failure
-	- By defining the tag of err_msg, it supports custom error message when parameter validation fails, demo `gbind:"http.cookie.BDUSS" validate="required,lt=100" err_msg="Please complete the login"`
+	- By defining the tag of err_msg, it supports custom error message when parameter validation fails, demo `gbind:"http.cookie.Token" validate="required,lt=100" err_msg="Please complete the login"`
 ## Usage example
 - Use gbind's web API request parameters for binding and verification
 
@@ -74,7 +74,7 @@ func ExampleGbind() {
 		URL: u,
 	}
 	r.AddCookie(&http.Cookie{
-		Name:  "BDUSS",
+		Name:  "Token",
 		Value: "foo-bar-andsoon",
 	})
 
@@ -90,7 +90,7 @@ func ExampleGbind() {
 	//	"Appkey": "abc",
 	//	"Page": 2,
 	//	"Size": 10,
-	//	"Bduss": "foo-bar-andsoon",
+	//	"Token": "foo-bar-andsoon",
 	//	"Host": "gbind.baidu.com",
 	//	"Uids": [
 	//		1,
