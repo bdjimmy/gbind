@@ -112,6 +112,49 @@ func TestInlineStruct(t *testing.T) {
 
 }
 
+func TestFieldByIndexs(t *testing.T) {
+	type Foo struct {
+		A int
+	}
+
+	type Bar struct {
+		Foo
+		B int
+		C *int
+	}
+
+	type Baz struct {
+		A int
+		Bar
+	}
+	four := 4
+	b := &Baz{
+		A: 1,
+		Bar: Bar{
+			Foo: Foo{
+				A: 2,
+			},
+			B: 3,
+			C: &four,
+		},
+	}
+
+	bv := reflect.ValueOf(b)
+
+	v := fieldByIndexs(bv, []int{0})
+	assert.Equal(t, 1, v.Interface().(int))
+
+	v = fieldByIndexs(bv, []int{1, 0, 0})
+	assert.Equal(t, 2, v.Interface().(int))
+
+	v = fieldByIndexs(bv, []int{1, 1})
+	assert.Equal(t, 3, v.Interface().(int))
+
+	v = fieldByIndexs(bv, []int{1, 2})
+	assert.Equal(t, 4, v.Interface().(int))
+
+}
+
 func TestBasicBind(t *testing.T) {
 	// bind
 	{
@@ -174,8 +217,7 @@ func TestBasicBind(t *testing.T) {
 }
 
 func TestBindTag(t *testing.T) {
-	g := NewGbind()
-	g.SetBindTag("mybind")
+	g := NewGbind(WithBindTag("mybind"))
 
 	{
 		type Foo struct {
@@ -190,8 +232,7 @@ func TestBindTag(t *testing.T) {
 }
 
 func TestErrTag(t *testing.T) {
-	g := NewGbind()
-	g.SetErrTag("error")
+	g := NewGbind(WithErrTag("error"))
 
 	// err_msg
 	{
@@ -207,8 +248,7 @@ func TestErrTag(t *testing.T) {
 }
 
 func TestDefaultSplit(t *testing.T) {
-	g := NewGbind()
-	g.SetDefalutSplit("-")
+	g := NewGbind(WithDefaultSplitFlag("-"))
 
 	{
 		type Foo struct {

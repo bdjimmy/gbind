@@ -21,6 +21,17 @@ var (
 
 // Gbind contains the gbind settings and cache
 type Gbind struct {
+	// gbind options
+	options *options
+	// local cache for *structType
+	localCache *cache
+	// tag execers facotry
+	tagExcers *ExecerFactory
+	// validator
+	validator *defaultValidator
+}
+
+type options struct {
 	// Bind tag name being used
 	bindTagName string
 	// Err tag name being used
@@ -30,27 +41,58 @@ type Gbind struct {
 	// useNumberForJSON causes the Decoder to unmarshal a number into an interface{} as a
 	// Number instead of as a float64.
 	useNumberForJSON bool
-	// local cache for *structType
-	localCache *cache
-	// tag execers facotry
-	tagExcers *ExecerFactory
-	// validator
-	validator *defaultValidator
+}
+
+// OptApply modify the default option
+type OptApply func(opt *options)
+
+// WithBindTag allows you to change the tag name used in structs
+func WithBindTag(tag string) OptApply {
+	return func(opt *options) {
+		opt.bindTagName = tag
+	}
+}
+
+// WithErrTag allows you to change the tag name used in structs
+func WithErrTag(tag string) OptApply {
+	return func(opt *options) {
+		opt.errTagName = tag
+	}
+}
+
+// WithDefaultSplitFlag allows you to change the splitFlag used in structs
+func WithDefaultSplitFlag(flag string) OptApply {
+	return func(opt *options) {
+		opt.defaultSplitFlag = flag
+	}
+}
+
+// WithUseNumberForJSON allows you to change the Decoder to unmarshal a number into an interface{} as a
+// Number instead of as a float64
+func WithUseNumberForJSON(use bool) OptApply {
+	return func(opt *options) {
+		opt.useNumberForJSON = use
+	}
 }
 
 // Helper gbind so users can use the functions directly from the package
 var defaultGbind = NewGbind()
 
 // NewGbind returns a new instance of 'Gbind' with sane defaults.
-func NewGbind() *Gbind {
+func NewGbind(opts ...OptApply) *Gbind {
 	g := &Gbind{
-		bindTagName:      defaultBindTag,
-		errTagName:       defaultErrTag,
-		defaultSplitFlag: defaultSplitFlag,
-		useNumberForJSON: false,
-		localCache:       newCache(),
-		tagExcers:        NewExecerFactory(),
-		validator:        &defaultValidator{},
+		options: &options{
+			bindTagName:      defaultBindTag,
+			errTagName:       defaultErrTag,
+			defaultSplitFlag: defaultSplitFlag,
+			useNumberForJSON: false,
+		},
+		localCache: newCache(),
+		tagExcers:  NewExecerFactory(),
+		validator:  &defaultValidator{},
+	}
+	for _, apply := range opts {
+		apply(g.options)
 	}
 	g.tagExcers.Regitster("http", NewHTTPExecer)
 	return g
@@ -70,21 +112,6 @@ func BindWithValidate(ctx context.Context, v interface{}, data interface{}) (con
 	return defaultGbind.bind(ctx, v, data, true)
 }
 
-// SetBindTag allows you to change the tag name used in structs
-func (g *Gbind) SetBindTag(tag string) {
-	g.bindTagName = tag
-}
-
-// SetErrTag allows you to change the tag name used in structs
-func (g *Gbind) SetErrTag(tag string) {
-	g.errTagName = tag
-}
-
-// SetDefalutSplit allows you to change the splitFlag used in structs
-func (g *Gbind) SetDefalutSplit(flag string) {
-	g.defaultSplitFlag = flag
-}
-
 // RegisterBindFunc adds a bind Excer with the given name
 func (g *Gbind) RegisterBindFunc(name string, fn NewExecer) {
 	g.tagExcers.Regitster(name, fn)
@@ -97,12 +124,6 @@ func (g *Gbind) RegisterBindFunc(name string, fn NewExecer) {
 // - this method is not thread-safe it is intended that these all be registered prior to any validation
 func (g *Gbind) RegisterCustomValidation(tag string, fn validator.Func, callValidationEvenIfNull ...bool) error {
 	return g.validator.registerCustomValidation(tag, fn, callValidationEvenIfNull...)
-}
-
-// UseNumberForJSON causes the Decoder to unmarshal a number into an interface{} as a
-// Number instead of as a float64.
-func (g *Gbind) UseNumberForJSON(use bool) {
-	g.useNumberForJSON = use
 }
 
 // Bind parses the data interface and stores the result
@@ -153,7 +174,7 @@ func (g *Gbind) compile(value interface{}) (*structType, error) {
 		return st, nil
 	}
 	st := &structType{
-		g:          g,
+		gbind:      g,
 		hasJSONTag: false,
 		fields:     map[string]*fieldInfo{},
 		errMap:     map[string]string{},
@@ -161,7 +182,7 @@ func (g *Gbind) compile(value interface{}) (*structType, error) {
 	if err := st.deepTraverse(rt.Elem(), reflect.StructField{}, rt.Elem().Name(), []int{}); err != nil {
 		return nil, err
 	}
-	st.g.localCache.set(rt, st)
+	g.localCache.set(rt, st)
 	return st, nil
 }
 
@@ -194,7 +215,7 @@ func (g *Gbind) errMsg(st *structType, err error) error {
 }
 
 type structType struct {
-	g          *Gbind
+	gbind      *Gbind
 	hasJSONTag bool
 	fields     map[string]*fieldInfo
 	errMap     map[string]string
@@ -262,7 +283,7 @@ func (sv *structType) traverseField(rt reflect.Type, field reflect.StructField, 
 	}
 
 	// err tag
-	if v, ok := field.Tag.Lookup(sv.g.errTagName); ok {
+	if v, ok := field.Tag.Lookup(sv.gbind.options.errTagName); ok {
 		sv.errMap[ns] = v
 	}
 
@@ -272,13 +293,13 @@ func (sv *structType) traverseField(rt reflect.Type, field reflect.StructField, 
 		structField: field,
 		excer:       nil,
 		defaultOpt: DefaultOption{
-			DefaultSplitFlag: sv.g.defaultSplitFlag,
+			DefaultSplitFlag: sv.gbind.options.defaultSplitFlag,
 		},
 	}
 
 	sv.fields[ns] = fInfo
 
-	bindTag, ok := field.Tag.Lookup(sv.g.bindTagName)
+	bindTag, ok := field.Tag.Lookup(sv.gbind.options.bindTagName)
 	if !ok {
 		return nil
 	}
@@ -287,7 +308,7 @@ func (sv *structType) traverseField(rt reflect.Type, field reflect.StructField, 
 	bindTagValue := defaultOpt(bindTag, &fInfo.defaultOpt)
 
 	// excer
-	excer, err := sv.g.tagExcers.GetExecer(StringToSlice(bindTagValue))
+	excer, err := sv.gbind.tagExcers.GetExecer(StringToSlice(bindTagValue))
 	if err != nil {
 		return nil
 	}
@@ -301,7 +322,7 @@ func (sv *structType) parseJSON(data interface{}, obj interface{}) error {
 		return e("invalid request")
 	}
 	decoder := json.NewDecoder(req.Body)
-	if sv.g.useNumberForJSON {
+	if sv.gbind.options.useNumberForJSON {
 		decoder.UseNumber()
 	}
 	if err := decoder.Decode(obj); err != nil {

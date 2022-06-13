@@ -1,30 +1,29 @@
-English | [🇨🇳中文](README_ZH.md)
-# gbind
-	Encapsulate general parameter parsing and parameter verification logic, minimize repetitive code in daily development, and solve parameter binding and verification in a few lines of code
+# gbind包
+	封装通用的参数解析、参数校验逻辑，尽量减少日常开发的重复代码，几行代码进行解决所有参数的绑定和校验
 
 
 ## Features
-+ Bind data to the specified structure based on tag information
-	- Built-in HTTP request path, query, form, header, cookie binding ability
-		- Binding for http uri parameters  `gbind:"http.path"`
-		- Binding for http query parameters `gbind:"http.query.varname"`
-		- Binding for http header parameters  `gbind:"http.header.varname"`
-		- Binding for http form parameters `gbind:"http.form.varname"`
-		- Binding for http cookie parameters `gbind:"http.cookie.varname"`
-	- Built-in json binding capability, implemented with encoding/json
-		- For HTTP body in json format, follow golang json parsing format uniformly `json:"varname"`
-	- Support for setting default values of bound fields
-		- Supports setting default values of bound fields when no data is passed in `gbind:"http.query.变量名,default=123"`
-	- Support custom binding parsing logic (not limited to HTTP requests, using gbind can do bindings similar to database tags and other scenarios)
-		- You can register custom binding logic by calling the `RegisterBindFunc` function, such as implementing a binding of the form `gbind:"simple.key"`
++ 根据tag信息将数据绑定到指定的结构体
+	- 内置HTTP request的path、query、form、header、cookie的绑定能力
+		- 针对http uri参数进行绑定,  `gbind:"http.path"`
+		- 针对http query参数进行绑定 `gbind:"http.query.变量名"`
+		- 针对http header参数进行绑定  `gbind:"http.header.变量名"`
+		- 针对http form参数进行绑定 `gbind:"http.form.变量名"`
+		- 针对http cookie参数进行绑定 `gbind:"http.cookie.变量名"`
+	- 内置json的绑定能力，借助encoding/json实现
+		- 针对body为json格式的统一遵循golang json解析格式 `json:"name"`
+	- 支持设置绑定字段的默认值
+		- 在没有传入数据时，支持设置绑定字段的默认值 `gbind:"http.query.变量名,default=123"`
+	- 支持自定义绑定解析逻辑（不仅仅局限于针对HTTP request，使用gbind可以做类似数据库tag等场景的绑定）
+		- 通过调用 `RegisterBindFunc` 函数可以注册自定义的绑定逻辑，例如实现 `gbind:"simple.key"` 形式的绑定
 
-- Validate the field value according to the tag information, [parameter validation logic refer to the validate package](https://pkg.go.dev/gopkg.in/go-playground/validator.v9	)
-	- Data validation of bound fields is performed according to the defined `validate`tag, which depends on github.com/go-playground/validator implementation, `validate="required,lt=100"`
-	- Support custom validation logic, you can customize the data validation logic by calling the `RegisterCustomValidation` function
-	- Support custom error message for validation failure
-	- By defining the tag of err_msg, it supports custom error message when parameter validation fails, demo `gbind:"http.cookie.BDUSS" validate="required,lt=100" err_msg="Please complete the login"`
+- 根据tag信息进行字段值的校验，[参数校验逻辑参考validate包](https://pkg.go.dev/gopkg.in/go-playground/validator.v9	)
+	- 根据定义的 `validate`tag进行绑定字段的数据校验，依赖github.com/go-playground/validator实现， `validate="required,lt=100"`
+	- 支持自定义校验逻辑，通过调用 `RegisterCustomValidation`函数可以自定义数据校验逻辑
+	- 支持自定义校验失败的错误提示信息
+		- 通过定义 err_msg 的tag，在参数校验失败时支持自定义错误信息，demo `gbind:"http.cookie.BDUSS" validate="required,lt=100" err_msg="请想完成登录"`
 ## Usage example
-- Use gbind's web API request parameters for binding and verification
+- 使用gbind的web API请求参数进行绑定和校验
 
 ```golang
 package gbind
@@ -98,7 +97,7 @@ func ExampleGbind() {
 	//}
 }
 ```
-- Customize the binding logic, you can realize the binding of different scenarios, demo `gbind:"simple.key"`
+- 自定义绑定逻辑，可以实现不同场景的绑定，demo `gbind:"simple.key"`
 ```golang
 package gbind
 
@@ -143,7 +142,7 @@ func (s *simpleKeyExecer) Name() string {
 }
 
 ```
-- Custom data verification logic, can realize verification in different scenarios, demo `validate:"is-awesome"`
+- 自定义数据校验逻辑，可以实现不同场景的校验，demo `validate:"is-awesome"`
 ```golang
 func TestRegisterCustomValidation(t *testing.T) {
 	g := NewGbind()
@@ -165,8 +164,8 @@ func TestRegisterCustomValidation(t *testing.T) {
 ```
 
 ## benchmark
-+ Stressed the binding capabilities of the gin framework and the gbind package. The simple binding capabilities of query+form, gbind has a performance improvement of more than 10 times, and the complex binding capabilities of query+form+header, gbind has **30 times or more** performance improvement, the specific data are as follows
-	- HTTP query+form parameter binding, gin, gbind package comparison
++ 针对gin框架、gbind包的绑定能力进行了压测，query+form简单绑定能力，gbind有**10倍以上**的性能提升，query+form+header复杂的绑定能力，gbind有**30倍以上**的性能提升，具体数据如下
+	- http的query+form参数绑定，gin、gbind包对比
 ```	
 BenchmarkBind/gin-query-form-8         	  612357	      1937 ns/op	     304 B/op	      20 allocs/op
 BenchmarkBind/gbind-query-form-8       	 6981271	      171.3 ns/op	     200 B/op	       5 allocs/op
@@ -178,7 +177,7 @@ BenchmarkBind/gin-query-form-header-8  	  232152	      5143 ns/op	     736 B/op	
 BenchmarkBind/gbind-query-form-header-8   6673236	      180.0 ns/op	     232 B/op	       5 allocs/op	
 ```
 
-## Binding supported underlying data types
+## 绑定支持的基础数据类型
 + 基础数据类型
 	- int、int8、int16、int32、int64
 	- uint、uint8、uint16、uint32、uint64
@@ -189,14 +188,14 @@ BenchmarkBind/gbind-query-form-header-8   6673236	      180.0 ns/op	     232 B/o
 	- ptr
 		- *int、*uint、*float32、*string
 		- **int、**uint、**float32、**string
-		- Multilevel pointer to any underlying data type
+		- 任何基础数据类型的多级指针
 	- slice
-		- []int, []uint, []bool, []string, etc.
-		- []*int, []*uint, []*bool, []*string, etc.
-		- a slice of any underlying data type (including pointers)
+		- []int、[]uint、[]bool、[]string等
+		- []*int、[]*uint、[]*bool、[]*string等
+		- 任何基础数据类型（包含指针）的切片
 	- array
-		- [1]int, [2]uint, [3]bool, [4]string, etc.
-		- [5]*int, [6]*uint, [7]*bool, [8]*string, etc.
-		- Arrays of any underlying data type (including pointers)
-		- time.Duration
+		- [1]int、[2]uint、[3]bool、[4]string等
+		- [5]*int、[6]*uint、[7]*bool、[8]*string等
+		- 任何基础数据类型（包含指针）的数组
+	- time.Duration	
 

@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // --------- http execer start ---------
@@ -202,6 +203,11 @@ func TrySet(value reflect.Value, vs []string, opt *DefaultOption) error {
 	if len(vs) == 0 && def {
 		vs = strings.Split(opt.DefaultValue, opt.DefaultSplitFlag)
 	}
+	switch value.Interface().(type) {
+	case time.Duration:
+		return setTimeDuration(vs, value)
+	}
+
 	switch value.Kind() {
 	case reflect.Slice:
 		return setSlice(vs, value)
@@ -297,6 +303,17 @@ func setFloatField(val string, bitSize int, field reflect.Value) error {
 	floatVal, err := strconv.ParseFloat(val, bitSize)
 	if err == nil {
 		field.SetFloat(floatVal)
+	}
+	return err
+}
+
+func setTimeDuration(vals []string, field reflect.Value) error {
+	if len(vals) != 1 {
+		return nil
+	}
+	d, err := time.ParseDuration(vals[0])
+	if err == nil {
+		field.Set(reflect.ValueOf(d))
 	}
 	return err
 }

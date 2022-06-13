@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -196,15 +197,19 @@ func TestBaseType(t *testing.T) {
 		"base-type-int": {
 			struct{ F int }{}, nil, []string{"9"}, int(9),
 		},
+
 		"base-type-int8": {
 			struct{ F int8 }{}, nil, []string{"9"}, int8(9),
 		},
+
 		"base-type-int16": {
 			struct{ F int16 }{}, nil, []string{"9"}, int16(9),
 		},
+
 		"base-type-int32": {
 			struct{ F int32 }{}, nil, []string{"9"}, int32(9),
 		},
+
 		"base-type-int64": {
 			struct{ F int64 }{}, nil, []string{"9"}, int64(9),
 		},
@@ -212,15 +217,19 @@ func TestBaseType(t *testing.T) {
 		"base-type-uint": {
 			struct{ F uint }{}, nil, []string{"9"}, uint(9),
 		},
+
 		"base-type-uint8": {
 			struct{ F uint8 }{}, nil, []string{"9"}, uint8(9),
 		},
+
 		"base-type-uint16": {
 			struct{ F uint16 }{}, nil, []string{"9"}, uint16(9),
 		},
+
 		"base-type-uint32": {
 			struct{ F uint32 }{}, nil, []string{"9"}, uint32(9),
 		},
+
 		"base-type-uint64": {
 			struct{ F uint64 }{}, nil, []string{"9"}, uint64(9),
 		},
@@ -232,6 +241,7 @@ func TestBaseType(t *testing.T) {
 		"base-type-float32": {
 			struct{ F float32 }{}, nil, []string{"9.9"}, float32(9.9),
 		},
+
 		"base-type-float64": {
 			struct{ F float64 }{}, nil, []string{"9.9"}, float64(9.9),
 		},
@@ -239,9 +249,15 @@ func TestBaseType(t *testing.T) {
 		"base-type-string": {
 			struct{ F string }{}, nil, []string{"9"}, "9",
 		},
+
+		"base-type-duration": {
+			struct{ F time.Duration }{}, nil, []string{"1m10s"}, time.Second * 70,
+		},
+
 		"base-type-slice-string": {
 			struct{ F []string }{}, nil, []string{"9", "10", "11"}, []string{"9", "10", "11"},
 		},
+
 		"base-type-array-string": {
 			struct{ F [3]string }{}, nil, []string{"9", "10", "11"}, [3]string{"9", "10", "11"},
 		},
@@ -253,6 +269,7 @@ func TestBaseType(t *testing.T) {
 				DefaultSplitFlag: "|",
 			}, nil, int(999),
 		},
+
 		"base-type-uint-defualt": {
 			struct{ F uint }{}, &DefaultOption{
 				IsDefaultExists:  true,
@@ -260,6 +277,7 @@ func TestBaseType(t *testing.T) {
 				DefaultSplitFlag: "|",
 			}, nil, uint(9),
 		},
+
 		"base-type-string-defualt": {
 			struct{ F string }{}, &DefaultOption{
 				IsDefaultExists:  true,
@@ -267,6 +285,7 @@ func TestBaseType(t *testing.T) {
 				DefaultSplitFlag: "|",
 			}, nil, "9",
 		},
+
 		"base-type-bool-defualt": {
 			struct{ F bool }{}, &DefaultOption{
 				IsDefaultExists:  true,
@@ -274,6 +293,7 @@ func TestBaseType(t *testing.T) {
 				DefaultSplitFlag: "|",
 			}, nil, true,
 		},
+
 		"base-type-array-int-defualt": {
 			struct{ F [3]int }{}, &DefaultOption{
 				IsDefaultExists:  true,
@@ -281,6 +301,7 @@ func TestBaseType(t *testing.T) {
 				DefaultSplitFlag: "|",
 			}, nil, [3]int{1, 2, 3},
 		},
+
 		"base-type-slice-int-defualt": {
 			struct{ F []int }{}, &DefaultOption{
 				IsDefaultExists:  true,
