@@ -1,4 +1,4 @@
-module icode.baidu.com/baidu/searchbox/gbind
+module github.com/bdjimmy/gbind
 
 go 1.16
 
