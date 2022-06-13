@@ -1,7 +1,8 @@
 English | [🇨🇳中文](README_ZH.md)
 # gbind
 	Encapsulate general parameter parsing and parameter verification logic, 
-	minimize repetitive code in daily development, and solve parameter binding and verification in a few lines of code
+	minimize repetitive code in daily development, and solve parameter binding 
+	and verification in a few lines of code
 
 
 ## Features
