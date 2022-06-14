@@ -18,7 +18,7 @@ func MethodName() string {
 	pc, _, _, _ := runtime.Caller(2)
 	f := runtime.FuncForPC(pc)
 	if f == nil {
-		return "unkown method"
+		return "unknown method"
 	}
 	return f.Name()
 }
