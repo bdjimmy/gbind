@@ -1,7 +1,8 @@
 # gbind包
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/bdjimmy/gbind)](https://goreportcard.com/report/github.com/bdjimmy/gbind)
 <a title="Doc for ants" target="_blank" href="https://pkg.go.dev/github.com/bdjimmy/gbind?tab=doc"><img src="https://img.shields.io/badge/go.dev-doc-007d9c?style=flat-square&logo=read-the-docs" /></a>
-<a title="Codecov" target="_blank" href="https://codecov.io/gh/bdjimmy/gbind"><img src="https://img.shields.io/codecov/c/github/bdjimmy/gbind?style=flat-square&logo=codecov" /></a>
+![Coverage](https://img.shields.io/badge/Coverage-81.8%25-brightgreen)
 
 	封装通用的参数解析、参数校验逻辑，尽量减少日常开发的重复代码，几行代码进行解决所有参数的绑定和校验
 
