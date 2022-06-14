@@ -2,6 +2,7 @@ English | [🇨🇳中文](README_ZH.md)
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/bdjimmy/gbind)](https://goreportcard.com/report/github.com/bdjimmy/gbind)
 <a title="Doc for ants" target="_blank" href="https://pkg.go.dev/github.com/bdjimmy/gbind?tab=doc"><img src="https://img.shields.io/badge/go.dev-doc-007d9c?style=flat-square&logo=read-the-docs" /></a>
+<a title="Codecov" target="_blank" href="https://codecov.io/gh/bdjimmy/gbind"><img src="https://img.shields.io/codecov/c/github/bdjimmy/gbind?style=flat-square&logo=codecov" /></a>
 ![Coverage](https://img.shields.io/badge/Coverage-81.8%25-brightgreen)
 # gbind
 	Encapsulate general parameter parsing and parameter verification logic, 
