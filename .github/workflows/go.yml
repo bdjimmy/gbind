@@ -1,0 +1,33 @@
+name: Go
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -race -coverprofile=coverage -covermode=atomic -v
+
+    - name: Upload code coverage report to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+      file: ./coverage
+      flags: unittests
+      verbose: true
+      name: codecov-gbind
