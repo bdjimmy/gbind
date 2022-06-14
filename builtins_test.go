@@ -122,7 +122,7 @@ func TestHttpForm(t *testing.T) {
 
 	excer, err := newHTTPExecer(bytes.Split([]byte("http.form.id"), dot))
 	assert.Nil(t, err)
-	assert.Equal(t, "http.path", excer.Name())
+	assert.Equal(t, "http.form", excer.Name())
 
 	for testName, st := range map[string]struct {
 		context.Context
