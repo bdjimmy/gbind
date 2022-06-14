@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// --------- http execer start ---------
+// ---------- http execer start ----------
 var (
 	_ Execer = &httpPathExcer{}
 	_ Execer = &httpQueryExcer{}
