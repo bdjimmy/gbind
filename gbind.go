@@ -151,7 +151,10 @@ func (g *Gbind) bind(ctx context.Context, v interface{}, data interface{}, valid
 	}
 	// special case
 	if st.hasJSONTag {
-		st.parseJSON(data, v)
+		err := st.parseJSON(data, v)
+		if err != nil {
+			return ctx, err
+		}
 	}
 	for _, f := range st.fields {
 		if f.excer == nil {

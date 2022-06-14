@@ -15,6 +15,10 @@ type exprKey struct{}
 
 func TestExpr(t *testing.T) {
 	ef := newexecerFactory().regitster("simple", NewSimpleExecer)
+
+	_, err := ef.getExecer([]byte("simple.test"))
+	assert.NotNil(t, err)
+
 	excer, err := ef.getExecer([]byte("simple.key"))
 	assert.Nil(t, err)
 

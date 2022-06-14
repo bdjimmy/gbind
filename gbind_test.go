@@ -2,6 +2,7 @@ package gbind
 
 import (
 	"context"
+	"encoding/json"
 	"reflect"
 	"testing"
 
@@ -296,16 +297,60 @@ func TestRegisterCustomValidation(t *testing.T) {
 }
 
 func TestJosn(t *testing.T) {
-	type Foo struct {
-		Appkey  string `json:"appkey"`
-		AppName string `json:"appname"`
+	{
+		type Foo struct {
+			Appkey  string `json:"appkey"`
+			AppName string `json:"appname"`
+		}
+		f := &Foo{}
+
+		req := newReq().setBody(`{"appkey":"abc","appname":"123"}`).r()
+		_, err := Bind(context.Background(), f, req)
+
+		assert.Nil(t, err)
+		assert.Equal(t, "abc", f.Appkey)
+		assert.Equal(t, "123", f.AppName)
 	}
-	f := &Foo{}
+	{
+		type Foo struct {
+			ID interface{} `json:"id"`
+		}
+		f := &Foo{}
 
-	req := newReq().setBody(`{"appkey":"abc","appname":"123"}`).r()
-	_, err := Bind(context.Background(), f, req)
+		req := newReq().setBody(`{"id":280123412341234123}`).r()
+		g := NewGbind(WithUseNumberForJSON(false))
+		_, err := g.Bind(context.Background(), f, req)
+		assert.Nil(t, err)
+		assert.Equal(t, float64(280123412341234123), f.ID)
 
-	assert.Nil(t, err)
-	assert.Equal(t, "abc", f.Appkey)
-	assert.Equal(t, "123", f.AppName)
+		req = newReq().setBody(`{"id":280123412341234123}`).r()
+		g = NewGbind(WithUseNumberForJSON(true))
+		_, err = g.Bind(context.Background(), f, req)
+		assert.Nil(t, err)
+		assert.Equal(t, json.Number("280123412341234123"), f.ID)
+	}
+}
+
+func TestCheckValid(t *testing.T) {
+	type Foo struct{}
+	{
+		var f = Foo{}
+		err := NewGbind().checkValid(reflect.ValueOf(f))
+		assert.NotNil(t, err)
+	}
+	{
+		var f = Foo{}
+		err := NewGbind().checkValid(reflect.ValueOf(&f))
+		assert.Nil(t, err)
+	}
+	{
+		var f = &Foo{}
+		err := NewGbind().checkValid(reflect.ValueOf(&f))
+		assert.NotNil(t, err)
+	}
+	{
+		var f = 123
+		err := NewGbind().checkValid(reflect.ValueOf(&f))
+		assert.NotNil(t, err)
+	}
 }
