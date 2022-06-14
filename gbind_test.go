@@ -162,7 +162,7 @@ func TestBasicBind(t *testing.T) {
 			Appkey string `gbind:"http.query.appkey"`
 		}
 		f := &Foo{}
-		req := NewReq().AddQueryParam("appkey", "abc").R()
+		req := newReq().addQueryParam("appkey", "abc").r()
 		_, err := Bind(context.Background(), f, req)
 		assert.Nil(t, err)
 		assert.Equal(t, "abc", f.Appkey)
@@ -174,7 +174,7 @@ func TestBasicBind(t *testing.T) {
 			Appkey *string `gbind:"http.query.appkey"`
 		}
 		f := &Foo{}
-		req := NewReq().AddQueryParam("appkey", "abc").R()
+		req := newReq().addQueryParam("appkey", "abc").r()
 		_, err := Bind(context.Background(), f, req)
 		assert.Nil(t, err)
 		assert.Equal(t, "abc", *(f.Appkey))
@@ -186,7 +186,7 @@ func TestBasicBind(t *testing.T) {
 			Appkey string `gbind:"http.query.appkey,default=123"`
 		}
 		f := &Foo{}
-		req := NewReq().R()
+		req := newReq().r()
 		_, err := Bind(context.Background(), f, req)
 		assert.Nil(t, err)
 		assert.Equal(t, "123", f.Appkey)
@@ -198,7 +198,7 @@ func TestBasicBind(t *testing.T) {
 			Appkey string `gbind:"http.query.appkey" validate:"required"`
 		}
 		f := &Foo{}
-		req := NewReq().R()
+		req := newReq().r()
 		_, err := BindWithValidate(context.Background(), f, req)
 		assert.NotNil(t, err)
 	}
@@ -209,7 +209,7 @@ func TestBasicBind(t *testing.T) {
 			Appkey string `gbind:"http.query.appkey" validate:"required" err_msg:"field appkey is required"`
 		}
 		f := &Foo{}
-		req := NewReq().R()
+		req := newReq().r()
 		_, err := BindWithValidate(context.Background(), f, req)
 		assert.NotNil(t, err)
 		assert.Equal(t, "field appkey is required", err.Error())
@@ -224,7 +224,7 @@ func TestBindTag(t *testing.T) {
 			Appkey string `mybind:"http.query.appkey"`
 		}
 		f := &Foo{}
-		req := NewReq().AddQueryParam("appkey", "abc").R()
+		req := newReq().addQueryParam("appkey", "abc").r()
 		_, err := g.Bind(context.Background(), f, req)
 		assert.Nil(t, err)
 		assert.Equal(t, "abc", f.Appkey)
@@ -240,7 +240,7 @@ func TestErrTag(t *testing.T) {
 			Appkey string `gbind:"http.query.appkey" validate:"required" error:"field appkey is required"`
 		}
 		f := &Foo{}
-		req := NewReq().R()
+		req := newReq().r()
 		_, err := g.BindWithValidate(context.Background(), f, req)
 		assert.NotNil(t, err)
 		assert.Equal(t, "field appkey is required", err.Error())
@@ -255,7 +255,7 @@ func TestDefaultSplit(t *testing.T) {
 			Uids []int `gbind:"http.query.uid,default=1-2-3"`
 		}
 		f := &Foo{}
-		req := NewReq().R()
+		req := newReq().r()
 		_, err := g.Bind(context.Background(), f, req)
 		assert.Nil(t, err)
 		assert.Equal(t, []int{1, 2, 3}, f.Uids)
@@ -289,7 +289,7 @@ func TestRegisterCustomValidation(t *testing.T) {
 			Appkey string `gbind:"http.query.appkey" validate:"is-awesome"`
 		}
 		f := &Foo{}
-		req := NewReq().AddQueryParam("appkey", "awesome").R()
+		req := newReq().addQueryParam("appkey", "awesome").r()
 		_, err := g.BindWithValidate(context.Background(), f, req)
 		assert.Nil(t, err)
 	}
@@ -302,7 +302,7 @@ func TestJosn(t *testing.T) {
 	}
 	f := &Foo{}
 
-	req := NewReq().SetBody(`{"appkey":"abc","appname":"123"}`).R()
+	req := newReq().setBody(`{"appkey":"abc","appname":"123"}`).r()
 	_, err := Bind(context.Background(), f, req)
 
 	assert.Nil(t, err)

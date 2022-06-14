@@ -29,14 +29,14 @@ type BindTestCookie struct {
 }
 
 func BenchmarkBind(b *testing.B) {
-	req := NewReq().
-		AddQueryParam("ak", "ak1").
-		AddQueryParam("tk", "tk1").
-		AddQueryParam("ts", "123456789"). //
-		AddFormParam("page", "1").
-		AddFormParam("size", "2").
-		AddFormParam("appkey", "3").
-		AddHeader("host", "www.baidu.com").R()
+	req := newReq().
+		addQueryParam("ak", "ak1").
+		addQueryParam("tk", "tk1").
+		addQueryParam("ts", "123456789"). //
+		addFormParam("page", "1").
+		addFormParam("size", "2").
+		addFormParam("appkey", "3").
+		addHeader("host", "www.baidu.com").r()
 	req.AddCookie(&http.Cookie{
 		Name:  "BDUSS",
 		Value: "bduss-value",

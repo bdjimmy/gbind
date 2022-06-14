@@ -26,7 +26,7 @@ type Gbind struct {
 	// local cache for *structType
 	localCache *cache
 	// tag execers facotry
-	tagExcers *ExecerFactory
+	tagExcers *execerFactory
 	// validator
 	validator *defaultValidator
 }
@@ -88,13 +88,13 @@ func NewGbind(opts ...OptApply) *Gbind {
 			useNumberForJSON: false,
 		},
 		localCache: newCache(),
-		tagExcers:  NewExecerFactory(),
+		tagExcers:  newexecerFactory(),
 		validator:  &defaultValidator{},
 	}
 	for _, apply := range opts {
 		apply(g.options)
 	}
-	g.tagExcers.Regitster("http", NewHTTPExecer)
+	g.tagExcers.regitster("http", newHTTPExecer)
 	return g
 }
 
@@ -114,7 +114,7 @@ func BindWithValidate(ctx context.Context, v interface{}, data interface{}) (con
 
 // RegisterBindFunc adds a bind Excer with the given name
 func (g *Gbind) RegisterBindFunc(name string, fn NewExecer) {
-	g.tagExcers.Regitster(name, fn)
+	g.tagExcers.regitster(name, fn)
 }
 
 // RegisterCustomValidation adds a validation with the given tag
@@ -308,7 +308,7 @@ func (sv *structType) traverseField(rt reflect.Type, field reflect.StructField, 
 	bindTagValue := defaultOpt(bindTag, &fInfo.defaultOpt)
 
 	// excer
-	excer, err := sv.gbind.tagExcers.GetExecer(StringToSlice(bindTagValue))
+	excer, err := sv.gbind.tagExcers.getExecer(StringToSlice(bindTagValue))
 	if err != nil {
 		return nil
 	}

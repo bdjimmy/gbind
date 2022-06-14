@@ -14,8 +14,8 @@ import (
 type exprKey struct{}
 
 func TestExpr(t *testing.T) {
-	ef := NewExecerFactory().Regitster("simple", NewSimpleExecer)
-	excer, err := ef.GetExecer([]byte("simple.key"))
+	ef := newexecerFactory().regitster("simple", NewSimpleExecer)
+	excer, err := ef.getExecer([]byte("simple.key"))
 	assert.Nil(t, err)
 
 	var v string

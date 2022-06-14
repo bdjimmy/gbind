@@ -12,10 +12,10 @@ import (
 )
 
 func TestHttpCookie(t *testing.T) {
-	_, err := NewHTTPExecer(bytes.Split([]byte("http.cookie.id.a"), dot))
+	_, err := newHTTPExecer(bytes.Split([]byte("http.cookie.id.a"), dot))
 	assert.NotNil(t, err)
 
-	excer, err := NewHTTPExecer(bytes.Split([]byte("http.cookie.id"), dot))
+	excer, err := newHTTPExecer(bytes.Split([]byte("http.cookie.id"), dot))
 	assert.Nil(t, err)
 
 	for testName, st := range map[string]struct {
@@ -28,14 +28,14 @@ func TestHttpCookie(t *testing.T) {
 		"http-cookie-id": {
 			context.Background(),
 			struct{ T int }{},
-			NewReq().AddCookie("id", "123").R(),
+			newReq().addCookie("id", "123").r(),
 			nil,
 			int(123),
 		},
 		"http-cookie-id-default": {
 			context.Background(),
 			struct{ T int }{},
-			NewReq().R(),
+			newReq().r(),
 			&DefaultOption{IsDefaultExists: true, DefaultValue: "123456", DefaultSplitFlag: "|"},
 			int(123456),
 		},
@@ -48,10 +48,10 @@ func TestHttpCookie(t *testing.T) {
 }
 
 func TestHttpHead(t *testing.T) {
-	_, err := NewHTTPExecer(bytes.Split([]byte("http.header.id.a"), dot))
+	_, err := newHTTPExecer(bytes.Split([]byte("http.header.id.a"), dot))
 	assert.NotNil(t, err)
 
-	excer, err := NewHTTPExecer(bytes.Split([]byte("http.header.id"), dot))
+	excer, err := newHTTPExecer(bytes.Split([]byte("http.header.id"), dot))
 	assert.Nil(t, err)
 
 	for testName, st := range map[string]struct {
@@ -64,14 +64,14 @@ func TestHttpHead(t *testing.T) {
 		"http-head-id": {
 			context.Background(),
 			struct{ T int }{},
-			NewReq().AddHeader("id", "123").R(),
+			newReq().addHeader("id", "123").r(),
 			nil,
 			int(123),
 		},
 		"http-head-id-default": {
 			context.Background(),
 			struct{ T int }{},
-			NewReq().R(),
+			newReq().r(),
 			&DefaultOption{IsDefaultExists: true, DefaultValue: "123456", DefaultSplitFlag: "|"},
 			int(123456),
 		},
@@ -84,10 +84,10 @@ func TestHttpHead(t *testing.T) {
 }
 
 func TestHttpPath(t *testing.T) {
-	_, err := NewHTTPExecer(bytes.Split([]byte("http.path.a"), dot))
+	_, err := newHTTPExecer(bytes.Split([]byte("http.path.a"), dot))
 	assert.NotNil(t, err)
 
-	excer, err := NewHTTPExecer(bytes.Split([]byte("http.path"), dot))
+	excer, err := newHTTPExecer(bytes.Split([]byte("http.path"), dot))
 	assert.Nil(t, err)
 
 	for testName, st := range map[string]struct {
@@ -100,7 +100,7 @@ func TestHttpPath(t *testing.T) {
 		"http-path": {
 			context.Background(),
 			struct{ T string }{},
-			NewReq().SetPath("/api/test").R(),
+			newReq().setPath("/api/test").r(),
 			nil,
 			"/api/test",
 		},
@@ -113,10 +113,10 @@ func TestHttpPath(t *testing.T) {
 }
 
 func TestHttpForm(t *testing.T) {
-	_, err := NewHTTPExecer(bytes.Split([]byte("http.form.id.a"), dot))
+	_, err := newHTTPExecer(bytes.Split([]byte("http.form.id.a"), dot))
 	assert.NotNil(t, err)
 
-	excer, err := NewHTTPExecer(bytes.Split([]byte("http.form.id"), dot))
+	excer, err := newHTTPExecer(bytes.Split([]byte("http.form.id"), dot))
 	assert.Nil(t, err)
 
 	for testName, st := range map[string]struct {
@@ -129,14 +129,14 @@ func TestHttpForm(t *testing.T) {
 		"http-form-id": {
 			context.Background(),
 			struct{ T int }{},
-			NewReq().AddFormParam("id", "123").R(),
+			newReq().addFormParam("id", "123").r(),
 			nil,
 			int(123),
 		},
 		"http-form-id-default": {
 			context.Background(),
 			struct{ T int }{},
-			NewReq().R(),
+			newReq().r(),
 			&DefaultOption{IsDefaultExists: true, DefaultValue: "123456", DefaultSplitFlag: "|"},
 			int(123456),
 		},
@@ -149,13 +149,13 @@ func TestHttpForm(t *testing.T) {
 }
 
 func TestHttpQuery(t *testing.T) {
-	_, err := NewHTTPExecer(bytes.Split([]byte("http.somehow"), dot))
+	_, err := newHTTPExecer(bytes.Split([]byte("http.somehow"), dot))
 	assert.NotNil(t, err)
 
-	_, err = NewHTTPExecer(bytes.Split([]byte("http.query.id.a"), dot))
+	_, err = newHTTPExecer(bytes.Split([]byte("http.query.id.a"), dot))
 	assert.NotNil(t, err)
 
-	excer, err := NewHTTPExecer(bytes.Split([]byte("http.query.id"), dot))
+	excer, err := newHTTPExecer(bytes.Split([]byte("http.query.id"), dot))
 	assert.Nil(t, err)
 
 	for testName, st := range map[string]struct {
@@ -168,14 +168,14 @@ func TestHttpQuery(t *testing.T) {
 		"http-query-id": {
 			context.Background(),
 			struct{ T int }{},
-			NewReq().AddQueryParam("id", "123").R(),
+			newReq().addQueryParam("id", "123").r(),
 			nil,
 			int(123),
 		},
 		"http-query-id-default": {
 			context.Background(),
 			struct{ T int }{},
-			NewReq().R(),
+			newReq().r(),
 			&DefaultOption{IsDefaultExists: true, DefaultValue: "123456", DefaultSplitFlag: "|"},
 			int(123456),
 		},

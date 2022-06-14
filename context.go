@@ -12,17 +12,17 @@ var (
 
 type metaKey struct{}
 
-// HTTPMetaData http execer
-type HTTPMetaData struct {
+// httpMetaData http execer
+type httpMetaData struct {
 	request    *http.Request
 	queryCache url.Values
 	formCache  url.Values
 }
 
 func newHTTPContext(ctx context.Context, req *http.Request) context.Context {
-	_, ok := ctx.Value(metaKey{}).(*HTTPMetaData)
+	_, ok := ctx.Value(metaKey{}).(*httpMetaData)
 	if !ok {
-		md := &HTTPMetaData{
+		md := &httpMetaData{
 			request: req,
 		}
 		ctx = context.WithValue(ctx, metaKey{}, md)
@@ -30,15 +30,15 @@ func newHTTPContext(ctx context.Context, req *http.Request) context.Context {
 	return ctx
 }
 
-func mustContextHTTPMeta(ctx context.Context) *HTTPMetaData {
-	md, ok := ctx.Value(metaKey{}).(*HTTPMetaData)
+func mustContextHTTPMeta(ctx context.Context) *httpMetaData {
+	md, ok := ctx.Value(metaKey{}).(*httpMetaData)
 	if !ok {
 		panic("context should use gbind.NewContext to initial first")
 	}
 	return md
 }
 
-func (hm *HTTPMetaData) initQueryCache() {
+func (hm *httpMetaData) initQueryCache() {
 	if hm.queryCache == nil {
 		if hm.request == nil {
 			hm.queryCache = url.Values{}
@@ -48,19 +48,19 @@ func (hm *HTTPMetaData) initQueryCache() {
 	}
 }
 
-func (hm *HTTPMetaData) initFormCache() {
+func (hm *httpMetaData) initFormCache() {
 	if hm.formCache == nil {
 		hm.request.ParseMultipartForm(defaultMultipartMemory)
 		hm.formCache = hm.request.PostForm
 	}
 }
 
-func (hm *HTTPMetaData) getFormArray(key string) (values []string) {
+func (hm *httpMetaData) getFormArray(key string) (values []string) {
 	hm.initFormCache()
 	return hm.formCache[key]
 }
 
-func (hm *HTTPMetaData) getQueryArray(key string) (values []string) {
+func (hm *httpMetaData) getQueryArray(key string) (values []string) {
 	hm.initQueryCache()
 	return hm.queryCache[key]
 }

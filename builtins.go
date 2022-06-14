@@ -37,8 +37,8 @@ var (
 	errHTTPPost   = errors.New("syntax error: http post error")
 )
 
-// NewHTTPExecer Execer are generated based on the values
-func NewHTTPExecer(values [][]byte) (Execer, error) {
+// newHTTPExecer Execer are generated based on the values
+func newHTTPExecer(values [][]byte) (Execer, error) {
 	n := len(values)
 	if n < 2 {
 		return nil, errHTTP

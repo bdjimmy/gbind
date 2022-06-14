@@ -6,12 +6,12 @@ import (
 	"unsafe"
 )
 
-// ReflectTypeID returns unique type identifier of v.
-func ReflectTypeID(v interface{}) uintptr {
-	// rt := reflect.TypeOf(v)
-	// return uintptr(unsafe.Pointer(rt))
-	return 0
-}
+// // ReflectTypeID returns unique type identifier of v.
+// func ReflectTypeID(v interface{}) uintptr {
+// 	// rt := reflect.TypeOf(v)
+// 	// return uintptr(unsafe.Pointer(rt))
+// 	return 0
+// }
 
 // MethodName get the name of the current executing function
 func MethodName() string {

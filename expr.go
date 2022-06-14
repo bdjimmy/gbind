@@ -20,26 +20,26 @@ type Execer interface {
 	Name() string
 }
 
-// ExecerFactory save all of the excer generators
-type ExecerFactory struct {
+// execerFactory save all of the excer generators
+type execerFactory struct {
 	m map[string]NewExecer
 }
 
-// NewExecerFactory save all of the excer generators
-func NewExecerFactory() *ExecerFactory {
-	return &ExecerFactory{
+// newexecerFactory save all of the excer generators
+func newexecerFactory() *execerFactory {
+	return &execerFactory{
 		m: map[string]NewExecer{},
 	}
 }
 
-// Regitster your own implemented generator
-func (ef *ExecerFactory) Regitster(name string, excerFunc NewExecer) *ExecerFactory {
+// regitster your own implemented generator
+func (ef *execerFactory) regitster(name string, excerFunc NewExecer) *execerFactory {
 	ef.m[name] = excerFunc
 	return ef
 }
 
-// GetExecer get an execer
-func (ef *ExecerFactory) GetExecer(value []byte) (execer Execer, err error) {
+// getExecer get an execer
+func (ef *execerFactory) getExecer(value []byte) (execer Execer, err error) {
 	var values = bytes.Split(value, dot)
 	newExecer, ok := ef.m[SliceToString(values[0])]
 	if !ok {

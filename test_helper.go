@@ -8,8 +8,8 @@ import (
 	"strings"
 )
 
-// HR helper to create http.Request
-type HR struct {
+// hr helper to create http.Request
+type hr struct {
 	method      string
 	path        string
 	header      http.Header
@@ -19,9 +19,9 @@ type HR struct {
 	body        io.ReadCloser
 }
 
-// NewReq create a pointer to http.Request
-func NewReq() *HR {
-	return &HR{
+// newReq create a pointer to http.Request
+func newReq() *hr {
+	return &hr{
 		path:        "/api/test",
 		queryParams: url.Values{},
 		formParams:  url.Values{},
@@ -30,32 +30,32 @@ func NewReq() *HR {
 	}
 }
 
-// SetMethod set the request method
-func (hr *HR) SetMethod(method string) *HR {
+// setMethod set the request method
+func (hr *hr) setMethod(method string) *hr {
 	hr.method = method
 	return hr
 }
 
-// SetPath set the request path
-func (hr *HR) SetPath(path string) *HR {
+// setPath set the request path
+func (hr *hr) setPath(path string) *hr {
 	hr.path = path
 	return hr
 }
 
-// AddQueryParam add the request query param
-func (hr *HR) AddQueryParam(k, v string) *HR {
+// addQueryParam add the request query param
+func (hr *hr) addQueryParam(k, v string) *hr {
 	hr.queryParams.Add(k, v)
 	return hr
 }
 
-// AddHeader add the request header
-func (hr *HR) AddHeader(k, v string) *HR {
+// addHeader add the request header
+func (hr *hr) addHeader(k, v string) *hr {
 	hr.header.Add(k, v)
 	return hr
 }
 
-// AddCookie add the request cookie
-func (hr *HR) AddCookie(k, v string) *HR {
+// addCookie add the request cookie
+func (hr *hr) addCookie(k, v string) *hr {
 	hr.cookies = append(hr.cookies, &http.Cookie{
 		Name:  k,
 		Value: v,
@@ -63,20 +63,20 @@ func (hr *HR) AddCookie(k, v string) *HR {
 	return hr
 }
 
-// AddFormParam add the request form param
-func (hr *HR) AddFormParam(k, v string) *HR {
+// addFormParam add the request form param
+func (hr *hr) addFormParam(k, v string) *hr {
 	hr.formParams.Add(k, v)
 	return hr
 }
 
-// SetBody set the request body
-func (hr *HR) SetBody(body string) *HR {
+// setBody set the request body
+func (hr *hr) setBody(body string) *hr {
 	hr.body = io.NopCloser(strings.NewReader(body))
 	return hr
 }
 
 // R translate into http.Request
-func (hr *HR) R() *http.Request {
+func (hr *hr) r() *http.Request {
 	u, e := url.Parse(fmt.Sprintf("http://www.test.com%s?%s", hr.path, hr.queryParams.Encode()))
 	if e != nil {
 		panic(e)
