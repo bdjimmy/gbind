@@ -1,4 +1,5 @@
 English | [🇨🇳中文](README_ZH.md)
+![Coverage](https://img.shields.io/badge/Coverage-81.8%25-brightgreen)
 # gbind
 	Encapsulate general parameter parsing and parameter verification logic, 
 	minimize repetitive code in daily development, and solve parameter binding 
