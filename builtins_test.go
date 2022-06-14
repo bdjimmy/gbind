@@ -197,7 +197,6 @@ func TestBaseType(t *testing.T) {
 		"base-type-int": {
 			struct{ F int }{}, nil, []string{"9"}, int(9),
 		},
-
 		"base-type-int8": {
 			struct{ F int8 }{}, nil, []string{"9"}, int8(9),
 		},
