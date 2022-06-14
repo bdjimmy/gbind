@@ -56,18 +56,18 @@ func (v *defaultValidator) ValidateStruct(obj interface{}) error {
 		return v.ValidateStruct(value.Elem().Interface())
 	case reflect.Struct:
 		return v.validateStruct(obj)
-	case reflect.Slice, reflect.Array:
-		count := value.Len()
-		validateRet := make(sliceValidateError, 0)
-		for i := 0; i < count; i++ {
-			if err := v.ValidateStruct(value.Index(i).Interface()); err != nil {
-				validateRet = append(validateRet, err)
-			}
-		}
-		if len(validateRet) == 0 {
-			return nil
-		}
-		return validateRet
+	// case reflect.Slice, reflect.Array:
+	//	count := value.Len()
+	//	validateRet := make(sliceValidateError, 0)
+	//	for i := 0; i < count; i++ {
+	//		if err := v.ValidateStruct(value.Index(i).Interface()); err != nil {
+	//			validateRet = append(validateRet, err)
+	//		}
+	//	}
+	//	if len(validateRet) == 0 {
+	//		return nil
+	//	}
+	//	return validateRet
 	default:
 		return nil
 	}

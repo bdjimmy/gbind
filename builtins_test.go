@@ -18,6 +18,7 @@ func TestHttpCookie(t *testing.T) {
 
 	excer, err := newHTTPExecer(bytes.Split([]byte("http.cookie.id"), dot))
 	assert.Nil(t, err)
+	assert.Equal(t, "http.cookie", excer.Name())
 
 	for testName, st := range map[string]struct {
 		context.Context
@@ -54,6 +55,7 @@ func TestHttpHead(t *testing.T) {
 
 	excer, err := newHTTPExecer(bytes.Split([]byte("http.header.id"), dot))
 	assert.Nil(t, err)
+	assert.Equal(t, "http.head", excer.Name())
 
 	for testName, st := range map[string]struct {
 		context.Context
@@ -90,6 +92,7 @@ func TestHttpPath(t *testing.T) {
 
 	excer, err := newHTTPExecer(bytes.Split([]byte("http.path"), dot))
 	assert.Nil(t, err)
+	assert.Equal(t, "http.path", excer.Name())
 
 	for testName, st := range map[string]struct {
 		context.Context
@@ -119,6 +122,7 @@ func TestHttpForm(t *testing.T) {
 
 	excer, err := newHTTPExecer(bytes.Split([]byte("http.form.id"), dot))
 	assert.Nil(t, err)
+	assert.Equal(t, "http.path", excer.Name())
 
 	for testName, st := range map[string]struct {
 		context.Context
@@ -158,6 +162,7 @@ func TestHttpQuery(t *testing.T) {
 
 	excer, err := newHTTPExecer(bytes.Split([]byte("http.query.id"), dot))
 	assert.Nil(t, err)
+	assert.Equal(t, "http.query", excer.Name())
 
 	for testName, st := range map[string]struct {
 		context.Context
