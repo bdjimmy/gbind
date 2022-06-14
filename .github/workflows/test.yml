@@ -47,9 +47,10 @@ jobs:
         skip_checkout: true
         file_pattern: ./README.md
 
-    - name: Push Changes
-      if: steps.auto-commit-action.outputs.changes_detected == 'true'
-      uses: ad-m/github-push-action@master
+    - name: Upload code coverage report to Codecov
+      uses: codecov/codecov-action@v2
       with:
-        github_token: ${{secrets.CODECOV_TOKEN}}
-        branch: ${{ github.ref }}
+        file: ./coverage.out
+        flags: unittests
+        verbose: true
+        name: codecov-gbind
