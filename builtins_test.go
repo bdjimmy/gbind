@@ -262,7 +262,7 @@ func TestBaseType(t *testing.T) {
 			struct{ F [3]string }{}, nil, []string{"9", "10", "11"}, [3]string{"9", "10", "11"},
 		},
 
-		"base-type-int-defualt": {
+		"base-type-int-default": {
 			struct{ F int }{}, &DefaultOption{
 				IsDefaultExists:  true,
 				DefaultValue:     "999",
@@ -270,7 +270,7 @@ func TestBaseType(t *testing.T) {
 			}, nil, int(999),
 		},
 
-		"base-type-uint-defualt": {
+		"base-type-uint-default": {
 			struct{ F uint }{}, &DefaultOption{
 				IsDefaultExists:  true,
 				DefaultValue:     "9",
@@ -278,7 +278,7 @@ func TestBaseType(t *testing.T) {
 			}, nil, uint(9),
 		},
 
-		"base-type-string-defualt": {
+		"base-type-string-default": {
 			struct{ F string }{}, &DefaultOption{
 				IsDefaultExists:  true,
 				DefaultValue:     "9",
@@ -286,7 +286,7 @@ func TestBaseType(t *testing.T) {
 			}, nil, "9",
 		},
 
-		"base-type-bool-defualt": {
+		"base-type-bool-default": {
 			struct{ F bool }{}, &DefaultOption{
 				IsDefaultExists:  true,
 				DefaultValue:     "true",
@@ -294,7 +294,7 @@ func TestBaseType(t *testing.T) {
 			}, nil, true,
 		},
 
-		"base-type-array-int-defualt": {
+		"base-type-array-int-default": {
 			struct{ F [3]int }{}, &DefaultOption{
 				IsDefaultExists:  true,
 				DefaultValue:     "1|2|3",
@@ -302,7 +302,7 @@ func TestBaseType(t *testing.T) {
 			}, nil, [3]int{1, 2, 3},
 		},
 
-		"base-type-slice-int-defualt": {
+		"base-type-slice-int-default": {
 			struct{ F []int }{}, &DefaultOption{
 				IsDefaultExists:  true,
 				DefaultValue:     "1|2|3",
